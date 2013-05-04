@@ -13,8 +13,7 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.services.calendar.CalendarScopes;
-import com.thoughtworks.imeeting.BaseActivity;
-import com.thoughtworks.imeeting.RequestCodes;
+import com.thoughtworks.imeeting.*;
 
 public class GoogleAuthenticationTask extends AsyncTask<String, Integer, String> {
 	private Context context;
