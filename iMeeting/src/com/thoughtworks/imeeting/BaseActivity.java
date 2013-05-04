@@ -29,12 +29,17 @@ public class BaseActivity extends Activity {
 	protected ProgressDialog progressDialog;
 	protected boolean loadCalendar = true;
 	
+	protected ProgressDialog getProgressDialog(){
+		if(progressDialog == null)
+			progressDialog = ProgressDialog.show(this, null, "Authenticating ...", true);
+		return progressDialog;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		progressDialog = ProgressDialog.show(this, null,
-				"Authenticating ...", true);
-		progressDialog.hide();
+		
+		getProgressDialog().hide();
 		prefs = this.getSharedPreferences(Keys.PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		accountName = prefs.getString(Keys.ACCOUNT_NAME_KEY, null);
@@ -64,13 +69,13 @@ public class BaseActivity extends Activity {
 	}
 
 	private void authenticateWithGoogle() {
-		progressDialog.show();
+		getProgressDialog().show();
 		new GoogleAuthenticationTask(this).execute(accountName);
 	}
 	
 	@Override
 	protected void onActivityResult( final int requestCode, final int resultCode, final Intent data) {
-		if(progressDialog.isShowing()) progressDialog.hide();
+		if(getProgressDialog().isShowing()) getProgressDialog().hide();
 		
 	     if (requestCode == RequestCodes.ACCOUNT_PICKER && resultCode == RESULT_OK) {
 	         accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);

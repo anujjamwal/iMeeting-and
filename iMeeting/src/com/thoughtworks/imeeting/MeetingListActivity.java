@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.api.services.calendar.model.Event;
+import com.thoughtworks.imeeting.tasks.CreateEventTask;
 import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
 import android.app.AlertDialog;
@@ -29,18 +30,19 @@ public class MeetingListActivity extends BaseActivity{
 		setContentView(R.layout.meeting_list);
 		
 		Intent intent = getIntent();
-		calendarId = intent.getStringExtra(Keys.CALENDAR_ID);		
+		calendarId = intent.getStringExtra(Keys.CALENDAR_ID);
+		calendarId = "thoughtworks.com_39393735383835392d353936@resource.calendar.google.com";
     }
 	
 	@Override
 	protected void onCalendarServiceReady(){
-		progressDialog.setMessage("Fetching Events ...");
-		progressDialog.show();
-		new FetchEventListTask(service, this).execute();
+		getProgressDialog().setMessage("Fetching Events ...");
+		getProgressDialog().show();
+		new FetchEventListTask(service, this, calendarId).execute();
 	}
 	
 	public void onEventListFetched(List<Event> events) {
-		progressDialog.hide();
+		getProgressDialog().hide();
 		populateEventListView(events);
 		presentQuickBookMenu(events);
 	}
@@ -70,16 +72,18 @@ public class MeetingListActivity extends BaseActivity{
 			
 			menuAleart.setTitle("Quick Book");
 			menuAleart.setItems(menuList.toArray(new String[0]),new DialogInterface.OnClickListener() {
-			 public void onClick(DialogInterface dialog, int item) {
-			  switch (item) {
-			  case 0:
-				  Toast.makeText(MeetingListActivity.this, "function 1 called", Toast.LENGTH_SHORT).show();
-			  break;
-			  case 1:
-				  Toast.makeText(MeetingListActivity.this, "function 2 called", Toast.LENGTH_SHORT).show();
-			  break;
-			  }
-			 }
+				 public void onClick(DialogInterface dialog, int item) {
+					 Date startTime = new Date(new Date().getTime() + 120000);
+					  switch (item) {
+					  case 0:
+						  createEvent(startTime, 1200000L);
+						  Toast.makeText(MeetingListActivity.this, "function 1 called", Toast.LENGTH_SHORT).show();
+					  break;
+					  case 1:
+						  Toast.makeText(MeetingListActivity.this, "function 2 called", Toast.LENGTH_SHORT).show();
+					  break;
+					  }
+				 }
 			});
 			AlertDialog menuDrop = menuAleart.create();
 			menuDrop.show();
@@ -96,6 +100,11 @@ public class MeetingListActivity extends BaseActivity{
 		listview.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item,  eventList));
 	}
 	
+	private void createEvent(Date startTime, Long duration) {
+		Date endTime = new Date(new Date().getTime() + duration);
+		new CreateEventTask(service, MeetingListActivity.this, calendarId)
+		.execute("Meeting", "Counaught Place", startTime, endTime);
+	}
 	
 
 }

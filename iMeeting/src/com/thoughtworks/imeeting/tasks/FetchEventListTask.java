@@ -45,7 +45,7 @@ public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
 						.events()
 						.list(calendarId)
 						.setTimeMin(new DateTime(now)).setSingleEvents(true)
-						.setTimeMax(new DateTime(max))
+						.setTimeMax(new DateTime(max)).setOrderBy("startTime")
 						.setTimeZone(cal.getTimeZone().toString())
 						.setPageToken(pageToken).execute();
 			  items.addAll(events.getItems());
