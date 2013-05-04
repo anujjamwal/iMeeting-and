@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 public class BaseActivity extends Activity {
 	protected String accountName;
@@ -32,11 +33,13 @@ public class BaseActivity extends Activity {
 		token = prefs.getString(Keys.ACCESS_TOKEN_KEY, null);
 		
 		if (accountName == null) {
+			Log.v(Keys.TAG, "Requesting user to select an account");
 			Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
 			         false, null, null, null, null);
 			startActivityForResult(intent, RequestCodes.ACCOUNT_PICKER);
 			
 		} else if(token == null) {
+			Log.v(Keys.TAG, "Initiating google token fetch");
 			new GoogleAuthenticationTask(this).execute(accountName);
 			
 		} else {
@@ -49,21 +52,22 @@ public class BaseActivity extends Activity {
 	protected void onActivityResult( final int requestCode, final int resultCode,
 	         final Intent data) {
 	     if (requestCode == RequestCodes.ACCOUNT_PICKER && resultCode == RESULT_OK) {
-	    	 
 	         accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+	         Log.v(Keys.TAG, "User selected the account: "+accountName);
 	         prefs.edit().putString(Keys.ACCOUNT_NAME_KEY, accountName).commit();	         
 	         new GoogleAuthenticationTask(this).execute(accountName);
 	         
 	     } else if (requestCode == RequestCodes.ACCOUNT_PERMISSION && resultCode == RESULT_OK) {
-	    	 
+	    	 Log.v(Keys.TAG, "User permitted the given: "+accountName);
 	    	 new GoogleAuthenticationTask(this).execute(accountName);
 	    	 
 	     } else if (requestCode == RequestCodes.NO_PLAY_SERVICE && resultCode == RESULT_OK){
-	    	 
+	    	 Log.v(Keys.TAG, "No Google Plus found on device ");
 	     }
 	 }
 	
 	public void handleToken( String token) {
+		Log.v(Keys.TAG, "Handle token request received");
 		this.token = token;
 		prefs.edit().putString(Keys.ACCESS_TOKEN_KEY, token);
 		createCalendarService();
@@ -89,6 +93,7 @@ public class BaseActivity extends Activity {
 		Calendar.Builder builder2 = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential);
 		builder2.setApplicationName(getString(R.string.app_name));
 		service = builder2.build();
+		Log.v(Keys.TAG, "Creating Calendar google service instance");
 	}
 
 }
