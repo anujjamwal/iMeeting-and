@@ -51,9 +51,10 @@ public class BaseActivity extends Activity {
 		prefs = this.getSharedPreferences(Keys.PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		accountName = prefs.getString(Keys.ACCOUNT_NAME_KEY, null);
+		prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
 		token = prefs.getString(Keys.ACCESS_TOKEN_KEY, null);
-		if (loadCalendar) {
-			
+
+		if (loadCalendar) {			
 			if (accountName == null) {
 				Log.v(Keys.TAG, "Requesting user to select an account");
 				Intent intent = AccountPicker.newChooseAccountIntent(null,

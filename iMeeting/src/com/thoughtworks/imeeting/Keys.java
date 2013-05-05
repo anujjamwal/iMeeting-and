@@ -4,6 +4,7 @@ public interface Keys {
 	String TAG = "iMeeting";
 	String PREFERENCE_NAME = "com.thoughtworks.imeeting";
 	String ACCOUNT_NAME_KEY = "com.thoughtworks.imeeting.accountName";
+	String DEFAULT_EVENT_NAME_KEY = "com.thoughtworks.imeeting.defaultEventName";
 	String ACCESS_TOKEN_KEY = "com.thoughtworks.imeeting.authToken";
 	String CALENDAR_ID = "com.thoughtworks.imeeting.calendarid";
 	String ROOM_NAME = "com.thoughtworks.imeeting.roomName";

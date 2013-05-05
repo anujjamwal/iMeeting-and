@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
@@ -19,6 +22,29 @@ import android.widget.Toast;
 public class RoomSelectorActivity extends TabActivity {
 	private TabHost tabHost;
 	private ScanResultReceiver scanResultReceiver;
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // use an inflater to populate the ActionBar with items
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+	
+	
+	@Override
+  	public boolean onOptionsItemSelected(MenuItem item){
+    	// same as using a normal menu
+    	switch(item.getItemId()) {
+	    	case R.id.action_settings:
+	    		Toast.makeText(getApplicationContext(), "Open Settings", Keys.TOAST_SHORT).show();
+	    		Intent intent = new Intent(this, SettingsActivity.class);
+	    		startActivity(intent);
+	    		break;
+    	}
+  		return true;
+  	}
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

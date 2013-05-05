@@ -153,15 +153,21 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f05000d;
+        public static final int account_label=0x7f05000e;
+        public static final int account_name=0x7f05000f;
+        public static final int action_settings=0x7f050013;
+        public static final int default_event_name=0x7f050011;
         public static final int hybrid=0x7f050004;
         public static final int label=0x7f050008;
+        public static final int linearLayout1=0x7f05000d;
         public static final int listView1=0x7f050009;
+        public static final int name_label=0x7f050010;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int progressBar1=0x7f050007;
         public static final int roomListView=0x7f05000a;
         public static final int satellite=0x7f050002;
+        public static final int save_settings=0x7f050012;
         public static final int tab1=0x7f05000b;
         public static final int tab2=0x7f05000c;
         public static final int terrain=0x7f050003;
@@ -175,6 +181,7 @@ containing a value of this type.
         public static final int qr_scanner=0x7f030003;
         public static final int room_list=0x7f030004;
         public static final int room_selector=0x7f030005;
+        public static final int settings=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -244,6 +251,7 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f04000e;
+        public static final int default_event_name=0x7f040014;
         public static final int hello_world=0x7f040013;
     }
     public static final class style {

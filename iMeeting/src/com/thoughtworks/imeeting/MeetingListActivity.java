@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -117,11 +116,11 @@ public class MeetingListActivity extends BaseActivity{
 	}
 	
 	private void createEvent(Date startTime, Long duration) {
+		String name = prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
 		getProgressDialog().setMessage("Booking "+roomName+"...");
 		getProgressDialog().show();
 		Date endTime = new Date(new Date().getTime() + duration);
-		new CreateEventTask(service, MeetingListActivity.this, calendarId)
-		.execute("Meeting", roomName, startTime, endTime);
+		new CreateEventTask(service, MeetingListActivity.this, calendarId).execute(name, roomName, startTime, endTime);
 	}
 	
 }
