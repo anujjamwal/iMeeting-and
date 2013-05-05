@@ -63,6 +63,7 @@ public class RoomSelectorActivity extends TabActivity {
 	  // Register mMessageReceiver to receive messages.
 	  LocalBroadcastManager.getInstance(this).registerReceiver(scanResultReceiver,
 	      new IntentFilter(Keys.SCAN_RESULT_INTENT));
+	  requestScan();
 	}
 	
 	@Override
@@ -81,15 +82,20 @@ public class RoomSelectorActivity extends TabActivity {
             String roomName = matcher.group(1);
             String calendarId = matcher.group(2);
             
-            Toast.makeText(getApplicationContext(), ""+roomName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), ""+roomName, Keys.TOAST_SHORT).show();
             
             Intent intent = new Intent(this, MeetingListActivity.class);
             intent.putExtra(Keys.CALENDAR_ID, calendarId);
             intent.putExtra(Keys.ROOM_NAME, roomName);
             startActivity(intent);
         } else {
-        	Toast.makeText(getApplicationContext(), "Invalid Room", Toast.LENGTH_SHORT).show();
+         	requestScan();
         }
+	}
+
+	protected void requestScan() {
+		Intent dataIntent = new Intent(Keys.SCAN_COMMAND_INTENT);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(dataIntent);
 	}
 
 }

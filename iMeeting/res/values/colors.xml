@@ -1,0 +1,6 @@
+
+    <resources>
+        <color name="splash_message">#ccc</color>
+        <color name="splash_background">#3344dd</color>
+        <color name="imeeting_splash">#bbb</color>
+    </resources>

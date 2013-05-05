@@ -30,10 +30,16 @@ public class BaseActivity extends Activity {
 	protected Calendar service;
 	protected ProgressDialog progressDialog;
 	protected boolean loadCalendar = true;
+	protected boolean showProgress = true; 
 	
 	protected ProgressDialog getProgressDialog(){
-		if(progressDialog == null)
-			progressDialog = ProgressDialog.show(this, null, "Authenticating ...", true);
+		if(progressDialog == null) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage("Authenticating Not ...");
+			progressDialog.setIndeterminate(true);
+			progressDialog.hide();
+		}
+		Log.v(Keys.TAG, "Asked for progress dilaog");
 		return progressDialog;
 	}
 	
@@ -41,8 +47,7 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
 		super.onCreate(savedInstanceState);
-		
-		getProgressDialog().hide();
+				
 		prefs = this.getSharedPreferences(Keys.PREFERENCE_NAME,
 				Context.MODE_PRIVATE);
 		accountName = prefs.getString(Keys.ACCOUNT_NAME_KEY, null);
@@ -72,12 +77,12 @@ public class BaseActivity extends Activity {
 	}
 
 	private void authenticateWithGoogle() {
-		getProgressDialog().show();
+		if(showProgress)  getProgressDialog().show();
 		new GoogleAuthenticationTask(this).execute(accountName);
 	}	
 
 	public void onMeetingCreated() {
-		getProgressDialog().hide();
+		if(getProgressDialog().isShowing()) getProgressDialog().hide();
 	}
 	
 	@Override

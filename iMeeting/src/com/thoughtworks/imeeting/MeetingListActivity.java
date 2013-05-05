@@ -41,6 +41,12 @@ public class MeetingListActivity extends BaseActivity{
 		new FetchEventListTask(service, this, calendarId).execute();
 	}
 	
+	@Override 
+	public void onMeetingCreated() {
+		super.onMeetingCreated();
+		onCalendarServiceReady();
+	}
+	
 	public void onEventListFetched(List<Event> events) {
 		getProgressDialog().hide();
 		populateEventListView(events);
@@ -59,43 +65,41 @@ public class MeetingListActivity extends BaseActivity{
 		Log.v(Keys.TAG, "Time Interval: "+timeInterval);
 		Log.v(Keys.TAG, "Event Start: "+eventStart);
 		Log.v(Keys.TAG, "Now Start: "+now);
-		if(timeInterval > 0) {
+		if(timeInterval > 15) {
 			ArrayList<String> menuList = new ArrayList<String>();
 			if(timeInterval >= 60) {
 				menuList.add("30 Minutes");
 				menuList.add("1 Hour");
 				duration[0] = 1800000L;
-				duration[0] = 3600000L;
+				duration[1] = 3600000L;
 			} else if(timeInterval > 45 ) {
 				menuList.add("30 Minutes");
 				menuList.add(timeInterval + " Minutes");
 				duration[0] = 1800000L;
-				duration[0] = timeInterval*60000;
-			} else if(timeInterval > 15 ) {
+				duration[1] = timeInterval*60000;
+			} else {
 				menuList.add(timeInterval + " Minutes");
 				duration[0] = timeInterval*60000;
 			}
 			
-			final AlertDialog.Builder menuAleart = new AlertDialog.Builder(MeetingListActivity.this);
-			
-			menuAleart.setTitle("Quick Book");
-			menuAleart.setItems(menuList.toArray(new String[0]),new DialogInterface.OnClickListener() {
-				 public void onClick(DialogInterface dialog, int item) {
-					 Date startTime = new Date(new Date().getTime() + 120000);
-					  switch (item) {
-					  case 0:
-						  createEvent(startTime, duration[0] - 120000);
-						  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[0]/60000+" min", Toast.LENGTH_SHORT).show();
-					  break;
-					  case 1:
-						  createEvent(startTime, duration[1] - 120000);
-						  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[1]/60000+" min", Toast.LENGTH_SHORT).show();
-					  break;
-					  }
-				 }
-			});
-			AlertDialog menuDrop = menuAleart.create();
-			menuDrop.show();
+			new AlertDialog.Builder(MeetingListActivity.this)
+				.setTitle("Quick Book")
+				.setItems(menuList.toArray(new String[0]),new DialogInterface.OnClickListener() {
+					 public void onClick(DialogInterface dialog, int item) {
+						 dialog.dismiss();
+						 Date startTime = new Date(new Date().getTime() + 120000);
+						  switch (item) {
+						  case 0:
+							  createEvent(startTime, duration[0] - 120000);
+							  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[0]/60000+" min", Keys.TOAST_SHORT).show();
+						  break;
+						  case 1:
+							  createEvent(startTime, duration[1] - 120000);
+							  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[1]/60000+" min", Keys.TOAST_SHORT).show();
+						  break;
+						  }
+					 }
+				}).create().show();
 		}
 		
 	}

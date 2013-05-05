@@ -9,6 +9,11 @@ public interface Keys {
 	String ROOM_NAME = "com.thoughtworks.imeeting.roomName";
 	String SELF_CALENDAR_ID = "primary";
 	String SCAN_RESULT_INTENT = "com.thoughtworks.imeeting.qrResultReady";
+	String SCAN_COMMAND_INTENT = "com.thoughtworks.imeeting.qrScanCommand";
 	String SCAN_RESULT = "com.thoughtworks.imeeting.scanResult";
 	String SCAN_RESULT_TYPE = "com.thoughtworks.imeeting.scanResultType";
+	int TOAST_VSHORT  = 1000;
+	int TOAST_SHORT  = 3000;
+	int TOAST_MEDIUM = 5000;
+	int TOAST_LONG   = 7000;
 }
