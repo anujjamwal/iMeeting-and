@@ -1,8 +1,5 @@
 package com.thoughtworks.imeeting;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,12 +10,22 @@ public class MainActivity extends BaseActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
-		loadCalendar = false;
+		
+//		loadCalendar = false;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		startActivity(new Intent(this, MeetingListActivity.class));
+		
+//		Intent intent = new Intent(this, MeetingListActivity.class);
+//		intent.putExtra(Keys.CALENDAR_ID, "thoughtworks.com_39393735383835392d353936@resource.calendar.google.com");
+//		startActivity(intent);
+		
     }
+	
+	@Override
+	protected void onCalendarServiceReady(){
+		Intent intent = new Intent(this, RoomSelectorActivity.class);
+		startActivity(intent);
+	}
 
 //	class GetCalendarDetails extends AsyncTask<Calendar, Void, Void> {
 //

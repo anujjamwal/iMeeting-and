@@ -1,0 +1,10 @@
+<resources>
+    <string-array name="Gurgaon">
+        <item >i-meeting\Counaught Place=thoughtworks.com_39393735383835392d353936@resource.calendar.google.com</item>
+        <item >i-meeting\Chandni Chowk=thoughtworks.com_373331393031332d343232@resource.calendar.google.com</item>
+        <item >i-meeting\India Gate=thoughtworks.com_3134383934373439343132@resource.calendar.google.com</item>
+        <item >i-meeting\Pragati Maidan=thoughtworks.com_2d31383832323635332d333830@resource.calendar.google.com</item>
+        <item >i-meeting\Parliament=thoughtworks.com_383736383938353235@resource.calendar.google.com</item>
+        <item >i-meeting\Qutub Minar=thoughtworks.com_39343834363831383531@resource.calendar.google.com</item>
+    </string-array>
+</resources>

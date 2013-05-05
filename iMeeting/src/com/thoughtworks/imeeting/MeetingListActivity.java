@@ -3,12 +3,6 @@ package com.thoughtworks.imeeting;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.google.api.services.calendar.model.Event;
-import com.thoughtworks.imeeting.tasks.CreateEventTask;
-import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,19 +13,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.api.services.calendar.model.Event;
+import com.thoughtworks.imeeting.tasks.CreateEventTask;
+import com.thoughtworks.imeeting.tasks.FetchEventListTask;
+
 public class MeetingListActivity extends BaseActivity{
 	private String calendarId;
+	private String roomName;
+	private Long[] duration = new Long[2];
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
-
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.meeting_list);
-		
+				
 		Intent intent = getIntent();
 		calendarId = intent.getStringExtra(Keys.CALENDAR_ID);
-		calendarId = "thoughtworks.com_39393735383835392d353936@resource.calendar.google.com";
+		roomName = intent.getStringExtra(Keys.ROOM_NAME);
+		
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.meeting_list);
+
     }
 	
 	@Override
@@ -44,13 +44,16 @@ public class MeetingListActivity extends BaseActivity{
 	public void onEventListFetched(List<Event> events) {
 		getProgressDialog().hide();
 		populateEventListView(events);
-		presentQuickBookMenu(events);
+		if(!calendarId.equalsIgnoreCase(Keys.SELF_CALENDAR_ID))
+			presentQuickBookMenu(events);
 	}
 
 	private void presentQuickBookMenu(List<Event> events) {
-		Event event = events.get(0);
+		long eventStart = new Date().getTime() + 172800000L;
+		if(events.size()>0){
+			eventStart = events.get(0).getStart().getDateTime().getValue();
+		}
 		
-		long eventStart = event.getStart().getDateTime().getValue();
 		long now = new Date().getTime();
 		long timeInterval = (eventStart - now)/(60000);
 		Log.v(Keys.TAG, "Time Interval: "+timeInterval);
@@ -61,11 +64,16 @@ public class MeetingListActivity extends BaseActivity{
 			if(timeInterval >= 60) {
 				menuList.add("30 Minutes");
 				menuList.add("1 Hour");
+				duration[0] = 1800000L;
+				duration[0] = 3600000L;
 			} else if(timeInterval > 45 ) {
 				menuList.add("30 Minutes");
 				menuList.add(timeInterval + " Minutes");
+				duration[0] = 1800000L;
+				duration[0] = timeInterval*60000;
 			} else if(timeInterval > 15 ) {
 				menuList.add(timeInterval + " Minutes");
+				duration[0] = timeInterval*60000;
 			}
 			
 			final AlertDialog.Builder menuAleart = new AlertDialog.Builder(MeetingListActivity.this);
@@ -76,11 +84,12 @@ public class MeetingListActivity extends BaseActivity{
 					 Date startTime = new Date(new Date().getTime() + 120000);
 					  switch (item) {
 					  case 0:
-						  createEvent(startTime, 1200000L);
-						  Toast.makeText(MeetingListActivity.this, "function 1 called", Toast.LENGTH_SHORT).show();
+						  createEvent(startTime, duration[0] - 120000);
+						  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[0]/60000+" min", Toast.LENGTH_SHORT).show();
 					  break;
 					  case 1:
-						  Toast.makeText(MeetingListActivity.this, "function 2 called", Toast.LENGTH_SHORT).show();
+						  createEvent(startTime, duration[1] - 120000);
+						  Toast.makeText(MeetingListActivity.this, "Quick Book "+roomName+" for "+duration[1]/60000+" min", Toast.LENGTH_SHORT).show();
 					  break;
 					  }
 				 }
@@ -101,9 +110,11 @@ public class MeetingListActivity extends BaseActivity{
 	}
 	
 	private void createEvent(Date startTime, Long duration) {
+		getProgressDialog().setMessage("Booking "+roomName+"...");
+		getProgressDialog().show();
 		Date endTime = new Date(new Date().getTime() + duration);
 		new CreateEventTask(service, MeetingListActivity.this, calendarId)
-		.execute("Meeting", "Counaught Place", startTime, endTime);
+		.execute("Meeting", roomName, startTime, endTime);
 	}
 	
 

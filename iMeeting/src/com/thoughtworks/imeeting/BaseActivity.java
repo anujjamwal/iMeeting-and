@@ -1,6 +1,8 @@
 package com.thoughtworks.imeeting;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -37,6 +39,7 @@ public class BaseActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
 		super.onCreate(savedInstanceState);
 		
 		getProgressDialog().hide();
@@ -71,6 +74,10 @@ public class BaseActivity extends Activity {
 	private void authenticateWithGoogle() {
 		getProgressDialog().show();
 		new GoogleAuthenticationTask(this).execute(accountName);
+	}	
+
+	public void onMeetingCreated() {
+		getProgressDialog().hide();
 	}
 	
 	@Override

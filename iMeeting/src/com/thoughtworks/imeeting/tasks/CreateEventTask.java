@@ -14,6 +14,8 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.thoughtworks.imeeting.BaseActivity;
+import com.thoughtworks.imeeting.Keys;
 
 public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
 	private Context context;
@@ -50,7 +52,7 @@ public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
 			event.setStart(new EventDateTime().setDateTime(start));			
 			event.setEnd(new EventDateTime().setDateTime(end));
 
-			createdEvent = service.events().insert("primary", event).execute();
+			createdEvent = service.events().insert(Keys.SELF_CALENDAR_ID, event).execute();
 
 			System.out.println(createdEvent.getId());
 		} catch(GoogleJsonResponseException e){
@@ -65,6 +67,6 @@ public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
     }
 
     protected void onPostExecute(Event event) {	
-    	
+    	((BaseActivity)context).onMeetingCreated();
     }
 }

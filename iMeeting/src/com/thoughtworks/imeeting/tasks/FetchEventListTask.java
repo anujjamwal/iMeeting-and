@@ -13,6 +13,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
+import com.thoughtworks.imeeting.Keys;
 import com.thoughtworks.imeeting.MeetingListActivity;
 
 public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
@@ -21,7 +22,7 @@ public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
 	private Calendar service;
 	
 	public FetchEventListTask(Calendar service, Context context) {
-		 this( service, context, "primary");
+		 this( service, context, Keys.SELF_CALENDAR_ID);
 	}
 	
 	public FetchEventListTask(Calendar service, Context context, String calendarId) {
@@ -48,7 +49,9 @@ public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
 						.setTimeMax(new DateTime(max)).setOrderBy("startTime")
 						.setTimeZone(cal.getTimeZone().toString())
 						.setPageToken(pageToken).execute();
-			  items.addAll(events.getItems());
+			  if(events != null && events.getItems() != null){
+				  items.addAll(events.getItems());
+			  }
 			  pageToken = events.getNextPageToken();
 			} while (pageToken != null);
 		} catch(GoogleJsonResponseException e){
