@@ -51,7 +51,8 @@ public class RoomSelectorActivity extends TabActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String result = intent.getStringExtra(Keys.SCAN_RESULT);
-			handleMeetingRoomId(result);
+			String result_type = intent.getStringExtra(Keys.SCAN_RESULT_TYPE);
+			handleMeetingRoomId(result, result_type);
 		}
 		
 	}
@@ -74,7 +75,7 @@ public class RoomSelectorActivity extends TabActivity {
 	} 
 	
 	final String MEETING_ROOM_ID_REGEX = "i-meeting\\\\(.+)=(.+)";
-	private void handleMeetingRoomId(String id) {
+	private void handleMeetingRoomId(String id, String type) {
 		Pattern pattern = Pattern.compile(MEETING_ROOM_ID_REGEX);
 
         Matcher matcher = pattern.matcher(id);
@@ -88,7 +89,7 @@ public class RoomSelectorActivity extends TabActivity {
             intent.putExtra(Keys.CALENDAR_ID, calendarId);
             intent.putExtra(Keys.ROOM_NAME, roomName);
             startActivity(intent);
-        } else {
+        } else if(!type.equalsIgnoreCase(Keys.ROOM_LIST)) {
          	requestScan();
         }
 	}

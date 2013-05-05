@@ -8,8 +8,7 @@ import android.view.WindowManager;
 public class MainActivity extends BaseActivity {
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("On Create for Main Activity");
+	protected void onCreate(Bundle savedInstanceState) {      
 		this.showProgress = false;
 		super.onCreate(savedInstanceState);
 

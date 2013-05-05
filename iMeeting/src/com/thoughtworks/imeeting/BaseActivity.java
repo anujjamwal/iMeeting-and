@@ -141,5 +141,11 @@ public class BaseActivity extends Activity {
 		Log.v(Keys.TAG, "Creating Calendar google service instance");
 		onCalendarServiceReady();
 	}
+	
+	@Override
+	public void onStop(){
+		getProgressDialog().dismiss();
+		super.onStop();
+	}
 
 }

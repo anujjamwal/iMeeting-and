@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class MeetingListActivity extends BaseActivity{
 	private String calendarId;
 	private String roomName;
 	private Long[] duration = new Long[2];
+	private AlertDialog quickBookDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class MeetingListActivity extends BaseActivity{
 				duration[0] = timeInterval*60000;
 			}
 			
-			new AlertDialog.Builder(MeetingListActivity.this)
+			quickBookDialog = new AlertDialog.Builder(MeetingListActivity.this)
 				.setTitle("Quick Book")
 				.setItems(menuList.toArray(new String[0]),new DialogInterface.OnClickListener() {
 					 public void onClick(DialogInterface dialog, int item) {
@@ -99,7 +101,8 @@ public class MeetingListActivity extends BaseActivity{
 						  break;
 						  }
 					 }
-				}).create().show();
+				}).create();
+			quickBookDialog.show();
 		}
 		
 	}
@@ -121,5 +124,4 @@ public class MeetingListActivity extends BaseActivity{
 		.execute("Meeting", roomName, startTime, endTime);
 	}
 	
-
 }

@@ -16,4 +16,5 @@ public interface Keys {
 	int TOAST_SHORT  = 3000;
 	int TOAST_MEDIUM = 5000;
 	int TOAST_LONG   = 7000;
+	String ROOM_LIST = "ROOM_LIST";
 }
