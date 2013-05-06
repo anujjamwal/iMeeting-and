@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    android:padding="20dp" >
+
+	<LinearLayout
+        android:id="@+id/title_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+        android:gravity="center_vertical|center_horizontal">
+
+	    <TextView
+	        android:id="@+id/meeting_title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingRight="10dp"
+	        android:paddingTop="10dp"
+	        android:paddingBottom="2dp"
+	        android:textAppearance="?android:attr/textAppearanceLarge" >
+
+	    </TextView>
+	</LinearLayout>
+
+	<TextView
+	    android:id="@+id/meeting_creator"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="Medium Text"
+	    android:paddingBottom="10dp"
+	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+
+	    <LinearLayout
+	        android:id="@+id/date_wrapper"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        android:gravity="right|bottom"
+	        android:orientation="horizontal" >
+
+	        <TextView
+	            android:id="@+id/start_time"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Small Text"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/meeting_times" />
+
+	        <TextView
+	            android:id="@+id/marker"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="  --  "
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	        <TextView
+	            android:id="@+id/end_time"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Small Text"
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/meeting_times" />
+	    </LinearLayout>
+
+	    <TextView
+	        android:id="@+id/meeting_date"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:text="Small Text"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textColor="@color/meeting_times" />
+	</RelativeLayout>
+
+</LinearLayout>

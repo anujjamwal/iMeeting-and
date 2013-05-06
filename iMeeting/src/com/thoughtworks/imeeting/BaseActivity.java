@@ -35,7 +35,7 @@ public class BaseActivity extends Activity {
 	protected ProgressDialog getProgressDialog(){
 		if(progressDialog == null) {
 			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("Authenticating Not ...");
+			progressDialog.setMessage("Authenticating ...");
 			progressDialog.setIndeterminate(true);
 			progressDialog.hide();
 		}

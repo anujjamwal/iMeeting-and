@@ -12,11 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.api.services.calendar.model.Event;
+import com.thoughtworks.imeeting.MeetingListAdapter;
 import com.thoughtworks.imeeting.tasks.CreateEventTask;
 import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
@@ -133,11 +133,11 @@ public class MeetingListActivity extends BaseActivity{
 
 	private void populateEventListView(List<Event> events) {
 		final ListView listview = (ListView) findViewById(R.id.listView1);
-		List<String> eventList = new ArrayList<String>();
-		for(Event event: events) {
-			eventList.add(event.getSummary()+" "+event.getStart().toString());
-		}
-		listview.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item,  eventList));
+//		List<String> eventList = new ArrayList<String>();
+//		for(Event event: events) {
+//			eventList.add(event.getSummary()+" "+event.getStart().toString());
+//		}
+		listview.setAdapter(new MeetingListAdapter(events, this));
 	}
 	
 	private void createEvent(Date startTime, Long duration) {

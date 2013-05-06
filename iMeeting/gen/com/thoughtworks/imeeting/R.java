@@ -136,6 +136,9 @@ containing a value of this type.
     }
     public static final class color {
         public static final int imeeting_splash=0x7f070002;
+        public static final int meeting_times=0x7f070003;
+        public static final int slot_available=0x7f070005;
+        public static final int slot_busy=0x7f070004;
         public static final int splash_background=0x7f070001;
         public static final int splash_message=0x7f070000;
     }
@@ -153,35 +156,44 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int account_label=0x7f05000e;
-        public static final int account_name=0x7f05000f;
-        public static final int action_settings=0x7f050013;
-        public static final int default_event_name=0x7f050011;
+        public static final int account_label=0x7f050016;
+        public static final int account_name=0x7f050017;
+        public static final int action_settings=0x7f05001b;
+        public static final int date_wrapper=0x7f05000d;
+        public static final int default_event_name=0x7f050019;
+        public static final int end_time=0x7f050010;
         public static final int hybrid=0x7f050004;
         public static final int label=0x7f050008;
-        public static final int linearLayout1=0x7f05000d;
+        public static final int linearLayout1=0x7f050015;
         public static final int listView1=0x7f050009;
-        public static final int name_label=0x7f050010;
+        public static final int marker=0x7f05000f;
+        public static final int meeting_creator=0x7f05000c;
+        public static final int meeting_date=0x7f050011;
+        public static final int meeting_title=0x7f05000b;
+        public static final int name_label=0x7f050018;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int progressBar1=0x7f050007;
-        public static final int roomListView=0x7f05000a;
+        public static final int roomListView=0x7f050012;
         public static final int satellite=0x7f050002;
-        public static final int save_settings=0x7f050012;
-        public static final int tab1=0x7f05000b;
-        public static final int tab2=0x7f05000c;
+        public static final int save_settings=0x7f05001a;
+        public static final int start_time=0x7f05000e;
+        public static final int tab1=0x7f050013;
+        public static final int tab2=0x7f050014;
         public static final int terrain=0x7f050003;
         public static final int textView1=0x7f050006;
         public static final int textView2=0x7f050005;
+        public static final int title_wrapper=0x7f05000a;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int list_item=0x7f030001;
         public static final int meeting_list=0x7f030002;
-        public static final int qr_scanner=0x7f030003;
-        public static final int room_list=0x7f030004;
-        public static final int room_selector=0x7f030005;
-        public static final int settings=0x7f030006;
+        public static final int meeting_list_item=0x7f030003;
+        public static final int qr_scanner=0x7f030004;
+        public static final int room_list=0x7f030005;
+        public static final int room_selector=0x7f030006;
+        public static final int settings=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
