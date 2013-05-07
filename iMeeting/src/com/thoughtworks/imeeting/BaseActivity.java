@@ -29,7 +29,6 @@ public class BaseActivity extends Activity {
 	protected SharedPreferences prefs;
 	protected Calendar service;
 	protected ProgressDialog progressDialog;
-	protected boolean loadCalendar = true;
 	protected boolean showProgress = true; 
 	
 	protected ProgressDialog getProgressDialog(){
@@ -54,24 +53,23 @@ public class BaseActivity extends Activity {
 		prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
 		token = prefs.getString(Keys.ACCESS_TOKEN_KEY, null);
 
-		if (loadCalendar) {			
-			if (accountName == null) {
-				Log.v(Keys.TAG, "Requesting user to select an account");
-				Intent intent = AccountPicker.newChooseAccountIntent(null,
-						null, new String[] { "com.google" }, false, null, null,
-						null, null);
-				startActivityForResult(intent, RequestCodes.ACCOUNT_PICKER);
+		if (accountName == null) {
+			Log.v(Keys.TAG, "Requesting user to select an account");
+			Intent intent = AccountPicker.newChooseAccountIntent(null,
+					null, new String[] { "com.google" }, false, null, null,
+					null, null);
+			startActivityForResult(intent, RequestCodes.ACCOUNT_PICKER);
 
-			} else if (token == null) {
-				Log.v(Keys.TAG, "Initiating google token fetch");
-				authenticateWithGoogle();
+		} else if (token == null) {
+			Log.v(Keys.TAG, "Initiating google token fetch");
+			authenticateWithGoogle();
 
-			} else {
-				createCalendarService();
+		} else {
+			createCalendarService();
 
-			}
 		}
 	}
+
 	
 	protected void onCalendarServiceReady(){
 		
@@ -97,6 +95,7 @@ public class BaseActivity extends Activity {
 	         authenticateWithGoogle();
 	         
 	     } else if (requestCode == RequestCodes.ACCOUNT_PERMISSION && resultCode == RESULT_OK) {
+	    	 Log.v(Keys.TAG, data.getExtras().toString());
 	    	 Log.v(Keys.TAG, "User permitted the given: "+accountName);
 	    	 authenticateWithGoogle();
 	    	 
@@ -112,11 +111,16 @@ public class BaseActivity extends Activity {
 		createCalendarService();
 	}
 	
+	public void chooseAccountForAuthentication(Intent intent) {
+		Log.v(Keys.TAG, "Requesting account permission");
+		startActivityForResult( intent, RequestCodes.ACCOUNT_PERMISSION);
+	}
+	
 	public void invalidateToken() {
 		Log.v(Keys.TAG, "Invalidating the token");
 		prefs.edit().remove(Keys.ACCESS_TOKEN_KEY);
 		GoogleAuthUtil.invalidateToken(getApplicationContext(), token);
-		this.onCreate(null);
+		authenticateWithGoogle();
 	}
 	
 	private void createCalendarService() {

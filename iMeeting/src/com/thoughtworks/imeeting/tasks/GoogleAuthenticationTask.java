@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -27,13 +28,16 @@ public class GoogleAuthenticationTask extends AsyncTask<String, Integer, String>
     protected String doInBackground(String... accountName) {
 		try {
 			token = GoogleAuthUtil.getToken(context, accountName[0], "oauth2:" + CalendarScopes.CALENDAR);
+			return token;
 		} catch (GooglePlayServicesAvailabilityException playEx) {
+			Log.v(Keys.TAG, "No Google Play found");
 	         GooglePlayServicesUtil.getErrorDialog( playEx.getConnectionStatusCode(),
 									                (Activity) context,
 									                RequestCodes.NO_PLAY_SERVICE);	             
 		} catch (UserRecoverableAuthException userAuthEx) {
+			Log.v(Keys.TAG, "User Auth Exception");
 			Intent intent = userAuthEx.getIntent();
-			((Activity)context).startActivityForResult( intent, RequestCodes.ACCOUNT_PERMISSION);
+			((BaseActivity)context).chooseAccountForAuthentication(intent);
     	}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -42,10 +46,10 @@ public class GoogleAuthenticationTask extends AsyncTask<String, Integer, String>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return token;
+		return null;
     }
 
     protected void onPostExecute(String token) {	
-    	((BaseActivity)context).handleToken(token);
+    	if(token!=null) ((BaseActivity)context).handleToken(token);
     }
 }
