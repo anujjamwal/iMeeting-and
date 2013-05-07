@@ -20,6 +20,7 @@ public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
 	private Context context;
 	private String calendarId;
 	private Calendar service;
+	private boolean unauthorised;
 	
 	public FetchEventListTask(Calendar service, Context context) {
 		 this( service, context, Keys.SELF_CALENDAR_ID);
@@ -54,16 +55,23 @@ public class FetchEventListTask extends AsyncTask<Void, Integer, List<Event>> {
 			  }
 			  pageToken = events.getNextPageToken();
 			} while (pageToken != null);
+			
+			return items;
 		} catch(GoogleJsonResponseException e){
-			((com.thoughtworks.imeeting.BaseActivity)context).invalidateToken();
+			e.printStackTrace();
+			if(e.getStatusCode() == 401) unauthorised = true;
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		return items;
+		return null;
     }
 
     protected void onPostExecute(List<Event> events) {	
-    	((MeetingListActivity)context).onEventListFetched(events);
+    	if(unauthorised) {
+    		((com.thoughtworks.imeeting.BaseActivity)context).invalidateToken();
+    	} else {
+    		((MeetingListActivity)context).onEventListFetched(events);
+    	}
     }
 }

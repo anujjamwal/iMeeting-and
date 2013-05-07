@@ -13,6 +13,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
 import com.thoughtworks.imeeting.tasks.GoogleAuthenticationTask;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -38,7 +39,6 @@ public class BaseActivity extends Activity {
 			progressDialog.setIndeterminate(true);
 			progressDialog.hide();
 		}
-		Log.v(Keys.TAG, "Asked for progress dilaog");
 		return progressDialog;
 	}
 	
@@ -80,13 +80,17 @@ public class BaseActivity extends Activity {
 		new GoogleAuthenticationTask(this).execute(accountName);
 	}	
 
-	public void onMeetingCreated() {
+	public void onMeetingCreated(Event event) {
+		hideProgressDialog();
+	}
+
+	protected void hideProgressDialog() {
 		if(getProgressDialog().isShowing()) getProgressDialog().hide();
 	}
 	
 	@Override
 	protected void onActivityResult( final int requestCode, final int resultCode, final Intent data) {
-		if(getProgressDialog().isShowing()) getProgressDialog().hide();
+		hideProgressDialog();
 		
 	     if (requestCode == RequestCodes.ACCOUNT_PICKER && resultCode == RESULT_OK) {
 	         accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -95,7 +99,6 @@ public class BaseActivity extends Activity {
 	         authenticateWithGoogle();
 	         
 	     } else if (requestCode == RequestCodes.ACCOUNT_PERMISSION && resultCode == RESULT_OK) {
-	    	 Log.v(Keys.TAG, data.getExtras().toString());
 	    	 Log.v(Keys.TAG, "User permitted the given: "+accountName);
 	    	 authenticateWithGoogle();
 	    	 

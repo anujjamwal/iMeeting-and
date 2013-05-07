@@ -14,7 +14,7 @@ import android.text.TextUtils;
 
 import com.dm.zbar.android.scanner.ZBarScannerActivity;
 
-public class CaptureActivity extends ZBarScannerActivity {
+public class CaptureActivity extends ZBarScannerActivity { 
 	private ScanCommandReceiver scanCommandReceiver;
 	private boolean scan = true;
 	
@@ -28,12 +28,13 @@ public class CaptureActivity extends ZBarScannerActivity {
 	public void onPreviewFrame(byte[] data, Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
         Camera.Size size = parameters.getPreviewSize();
-
-        Image barcode = new Image(size.width, size.height, "Y800");
-        barcode.setData(data);
-
+        
         int result = 0;
-        if (scan) result = mScanner.scanImage(barcode);
+        if (scan) {
+        	Image barcode = new Image(size.width, size.height, "Y800");
+            barcode.setData(data);
+        	result = mScanner.scanImage(barcode);
+        }
 
         if (result != 0) {
             SymbolSet syms = mScanner.getResults();
@@ -43,7 +44,7 @@ public class CaptureActivity extends ZBarScannerActivity {
                 	scan = false;
                     Intent dataIntent = new Intent(Keys.SCAN_RESULT_INTENT);
                     dataIntent.putExtra(Keys.SCAN_RESULT, symData);
-                    dataIntent.putExtra(Keys.SCAN_RESULT_TYPE, sym.getType());
+                    dataIntent.putExtra(Keys.SCAN_RESULT_TYPE, ""+sym.getType());
                     LocalBroadcastManager.getInstance(this).sendBroadcast(dataIntent);
                     break;
                 }
@@ -63,7 +64,6 @@ public class CaptureActivity extends ZBarScannerActivity {
 	@Override
 	public void onResume() {
 	  super.onResume();
-
 	  // Register mMessageReceiver to receive messages.
 	  LocalBroadcastManager.getInstance(this).registerReceiver(scanCommandReceiver,
 	      new IntentFilter(Keys.SCAN_COMMAND_INTENT));

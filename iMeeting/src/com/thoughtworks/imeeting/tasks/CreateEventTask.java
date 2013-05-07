@@ -21,6 +21,7 @@ public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
 	private Context context;
 	private String calendarId;
 	private Calendar service;
+	private boolean unauthorised;
 	
 	public CreateEventTask(Calendar service, Context context) {
 		 this( service, context, "primary");
@@ -53,20 +54,20 @@ public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
 			event.setEnd(new EventDateTime().setDateTime(end));
 
 			createdEvent = service.events().insert(Keys.SELF_CALENDAR_ID, event).execute();
+			return createdEvent;
 
-			System.out.println(createdEvent.getId());
 		} catch(GoogleJsonResponseException e){
 			e.printStackTrace();
-			if(e.getStatusCode() == 401)
-				((com.thoughtworks.imeeting.BaseActivity)context).invalidateToken();
+			if(e.getStatusCode() == 401) unauthorised = true;						  
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		return createdEvent;
+		return null;
     }
 
-    protected void onPostExecute(Event event) {	
-    	((BaseActivity)context).onMeetingCreated();
+    protected void onPostExecute(Event event) {
+    	if(unauthorised) ((BaseActivity)context).invalidateToken();
+    	else ((BaseActivity)context).onMeetingCreated(event);
     }
 }

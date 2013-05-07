@@ -68,8 +68,8 @@ public class MeetingListActivity extends BaseActivity{
   	}
 	
 	@Override 
-	public void onMeetingCreated() {
-		super.onMeetingCreated();
+	public void onMeetingCreated(Event event) {
+		super.onMeetingCreated(event);
 		onCalendarServiceReady();
 	}
 	
@@ -133,10 +133,6 @@ public class MeetingListActivity extends BaseActivity{
 
 	private void populateEventListView(List<Event> events) {
 		final ListView listview = (ListView) findViewById(R.id.listView1);
-//		List<String> eventList = new ArrayList<String>();
-//		for(Event event: events) {
-//			eventList.add(event.getSummary()+" "+event.getStart().toString());
-//		}
 		listview.setAdapter(new MeetingListAdapter(events, this));
 	}
 	
