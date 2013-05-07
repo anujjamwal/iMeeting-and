@@ -38,6 +38,10 @@ public class MeetingListAdapter extends BaseAdapter{
 		}
 	}
 
+	public List<MeetingEvent> getList() {
+		return list;
+	}
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

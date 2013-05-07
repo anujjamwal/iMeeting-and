@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.api.services.calendar.model.Event;
-import com.thoughtworks.imeeting.MeetingListAdapter;
+import com.thoughtworks.imeeting.models.MeetingEvent;
 import com.thoughtworks.imeeting.tasks.CreateEventTask;
 import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
@@ -133,7 +136,25 @@ public class MeetingListActivity extends BaseActivity{
 
 	private void populateEventListView(List<Event> events) {
 		final ListView listview = (ListView) findViewById(R.id.listView1);
-		listview.setAdapter(new MeetingListAdapter(events, this));
+		final MeetingListAdapter meetingListAdapter = new MeetingListAdapter(events, this);
+		listview.setAdapter(meetingListAdapter);
+		listview.setClickable(true);
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				// custom dialog
+				MeetingEvent event = meetingListAdapter.getList().get(arg2);
+				if(event.isEmptySlot()) {
+					MeetingBookDialog dialog = new MeetingBookDialog(MeetingListActivity.this,
+							event.getStartTime().getValue(),
+							event.getEndTime().getValue(), prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, null));
+					dialog.show();
+				} else {
+					
+				}
+				
+			}
+		});
 	}
 	
 	private void createEvent(Date startTime, Long duration) {
