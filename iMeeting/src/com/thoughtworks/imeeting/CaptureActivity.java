@@ -1,7 +1,5 @@
 package com.thoughtworks.imeeting;
 
-import java.util.Date;
-
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;

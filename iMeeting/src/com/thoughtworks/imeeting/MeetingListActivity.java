@@ -18,12 +18,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.services.calendar.model.Event;
 import com.thoughtworks.imeeting.models.MeetingEvent;
-import com.thoughtworks.imeeting.models.Task;
 import com.thoughtworks.imeeting.tasks.CreateEventTask;
 import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
@@ -33,8 +33,9 @@ public class MeetingListActivity extends BaseActivity{
 	private Long[] duration = new Long[2];
 	private AlertDialog quickBookDialog;
 	private List <Long> freeSlots;
-	private static final int MIN_15 = 900000;
-	private static final int MIN_30 = 1800000;
+	private static final long MIN_15 = 900000L;
+	private static final long MIN_30 = 1800000L;
+	private static final long MIN_60 = 3600000L;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,28 +144,41 @@ public class MeetingListActivity extends BaseActivity{
 	
 	private void showDialog(Long startTime, Long endTime){
 		List<String> availableSlots = populateSlots(startTime, endTime);
+		if(availableSlots.size() == 0) {
+			Toast.makeText(MeetingListActivity.this, "No slot here", Toast.LENGTH_SHORT);
+			return;
+		}
 	    AlertDialog.Builder b = new AlertDialog.Builder(this);
 	    b.setTitle("Book "+roomName);
-	    View book_room = getLayoutInflater().inflate(R.layout.room_book, null);
-	    NumberPicker slotSelector = (NumberPicker) book_room.findViewById(R.id.slotPicker);
+	    View bookRoom = getLayoutInflater().inflate(R.layout.room_book, null);
+	    String defaultTitle = prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, null);
+	    final NumberPicker slotSelector = (NumberPicker) bookRoom.findViewById(R.id.slotPicker);
+	    final TextView meetingTitle = (TextView) bookRoom.findViewById(R.id.meeting_title);
+	    final RadioGroup durationSelect = (RadioGroup) bookRoom.findViewById(R.id.radioGroup1);
+	    meetingTitle.setText(defaultTitle, TextView.BufferType.NORMAL);
 	    slotSelector.setMinValue(0);
 	    slotSelector.setMaxValue(availableSlots.size()-1);
 	    slotSelector.setDisplayedValues(availableSlots.toArray(new String[]{}));
 	    
-	    b.setView(book_room);
+	    b.setView(bookRoom);
 	    b.setPositiveButton("BOOK", new DialogInterface.OnClickListener()
 	    {
 	        @Override
 	        public void onClick(DialogInterface dialog, int whichButton)
 	        {
-	        	Toast.makeText(MeetingListActivity.this, "Book Room", Keys.TOAST_SHORT).show();
+	        	Long startTime = freeSlots.get(slotSelector.getValue());
+	        	String title = meetingTitle.getText().toString();
+	        	Long duration = durationSelect.getCheckedRadioButtonId() == R.id.radio0 ? MIN_30 : MIN_60;
 	        	dialog.dismiss();
+	        	Toast.makeText(MeetingListActivity.this, "In Progress", Toast.LENGTH_SHORT);
+//	        	createEvent(title, new Date(startTime), duration);
 	        }
 	    });
 	    b.setNegativeButton("CANCEL", null);
 	    b.create().show();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private List<String> populateSlots(long startTime, long endTime) {
 		freeSlots.clear();
 		long start = startTime/MIN_15*MIN_15;
