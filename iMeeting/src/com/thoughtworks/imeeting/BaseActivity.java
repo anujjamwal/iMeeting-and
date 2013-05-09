@@ -27,7 +27,6 @@ import android.util.Log;
 public class BaseActivity extends Activity {
 	protected String accountName;
 	protected String token;
-	protected SharedPreferences prefs;
 	protected Calendar service;
 	protected ProgressDialog progressDialog;
 	protected boolean showProgress = true; 
@@ -47,8 +46,7 @@ public class BaseActivity extends Activity {
 		Logger.getLogger("com.google.api.client").setLevel(Level.ALL);
 		super.onCreate(savedInstanceState);
 				
-		prefs = this.getSharedPreferences(Keys.PREFERENCE_NAME,
-				Context.MODE_PRIVATE);
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
 		accountName = prefs.getString(Keys.ACCOUNT_NAME_KEY, null);
 		prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
 		token = prefs.getString(Keys.ACCESS_TOKEN_KEY, null);
@@ -95,6 +93,7 @@ public class BaseActivity extends Activity {
 	     if (requestCode == RequestCodes.ACCOUNT_PICKER && resultCode == RESULT_OK) {
 	         accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 	         Log.v(Keys.TAG, "User selected the account: "+accountName);
+	         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
 	         prefs.edit().putString(Keys.ACCOUNT_NAME_KEY, accountName).commit();	         
 	         authenticateWithGoogle();
 	         
@@ -110,7 +109,8 @@ public class BaseActivity extends Activity {
 	public void handleToken( String token) {
 		Log.v(Keys.TAG, "Handle token request received");
 		this.token = token;
-		prefs.edit().putString(Keys.ACCESS_TOKEN_KEY, token);
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
+		prefs.edit().putString(Keys.ACCESS_TOKEN_KEY, token).commit();
 		createCalendarService();
 	}
 	
@@ -121,7 +121,8 @@ public class BaseActivity extends Activity {
 	
 	public void invalidateToken() {
 		Log.v(Keys.TAG, "Invalidating the token");
-		prefs.edit().remove(Keys.ACCESS_TOKEN_KEY);
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
+		prefs.edit().remove(Keys.ACCESS_TOKEN_KEY).commit();
 		GoogleAuthUtil.invalidateToken(getApplicationContext(), token);
 		authenticateWithGoogle();
 	}

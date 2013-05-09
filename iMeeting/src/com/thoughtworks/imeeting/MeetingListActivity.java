@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -142,7 +144,7 @@ public class MeetingListActivity extends BaseActivity{
 		
 	}
 	
-	private void showDialog(Long startTime, Long endTime){
+	private void showNewMeetingDialog(Long startTime, Long endTime){
 		List<String> availableSlots = populateSlots(startTime, endTime);
 		if(availableSlots.size() == 0) {
 			Toast.makeText(MeetingListActivity.this, "No slot here", Toast.LENGTH_SHORT);
@@ -151,6 +153,7 @@ public class MeetingListActivity extends BaseActivity{
 	    AlertDialog.Builder b = new AlertDialog.Builder(this);
 	    b.setTitle("Book "+roomName);
 	    View bookRoom = getLayoutInflater().inflate(R.layout.room_book, null);
+	    SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
 	    String defaultTitle = prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, null);
 	    final NumberPicker slotSelector = (NumberPicker) bookRoom.findViewById(R.id.slotPicker);
 	    final TextView meetingTitle = (TextView) bookRoom.findViewById(R.id.meeting_title);
@@ -170,7 +173,7 @@ public class MeetingListActivity extends BaseActivity{
 	        	String title = meetingTitle.getText().toString();
 	        	Long duration = durationSelect.getCheckedRadioButtonId() == R.id.radio0 ? MIN_30 : MIN_60;
 	        	dialog.dismiss();
-	        	Toast.makeText(MeetingListActivity.this, "In Progress", Toast.LENGTH_SHORT);
+	        	Toast.makeText(MeetingListActivity.this, "In Progress", Toast.LENGTH_SHORT).show();
 //	        	createEvent(title, new Date(startTime), duration);
 	        }
 	    });
@@ -206,13 +209,15 @@ public class MeetingListActivity extends BaseActivity{
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				MeetingEvent event = meetingListAdapter.getList().get(arg2); 
-				showDialog(event.getStartTime().getValue(), event.getEndTime().getValue());
+				MeetingEvent event = meetingListAdapter.getList().get(arg2);
+				if(event.isEmptySlot())
+					showNewMeetingDialog(event.getStartTime().getValue(), event.getEndTime().getValue());
 			}
 		});
 	}
 	
 	private void createEvent(Date startTime, Long duration) {
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
 		String name = prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
 		createEvent(name, startTime, duration);
 	}

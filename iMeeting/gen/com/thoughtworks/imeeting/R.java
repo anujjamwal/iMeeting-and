@@ -159,7 +159,8 @@ containing a value of this type.
         public static final int TextView01=0x7f050012;
         public static final int account_label=0x7f050019;
         public static final int account_name=0x7f05001a;
-        public static final int action_settings=0x7f05001e;
+        public static final int action_settings=0x7f05001f;
+        public static final int button1=0x7f05001d;
         public static final int date_wrapper=0x7f05000d;
         public static final int default_event_name=0x7f05001c;
         public static final int end_time=0x7f050010;
@@ -180,7 +181,7 @@ containing a value of this type.
         public static final int radioGroup1=0x7f050013;
         public static final int roomListView=0x7f050017;
         public static final int satellite=0x7f050002;
-        public static final int save_settings=0x7f05001d;
+        public static final int save_settings=0x7f05001e;
         public static final int slotPicker=0x7f050016;
         public static final int start_time=0x7f05000e;
         public static final int terrain=0x7f050003;

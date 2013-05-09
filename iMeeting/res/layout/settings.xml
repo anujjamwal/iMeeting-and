@@ -57,10 +57,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" 
         android:gravity="bottom|right">
+
+		<Button
+		    android:id="@+id/button1"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="20dp"
+		    android:text="Reset" />
     
 	    <Button
 	        android:id="@+id/save_settings"
-	        android:layout_width="150dp"
+	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="20dp"
 	        android:text="Save" />
