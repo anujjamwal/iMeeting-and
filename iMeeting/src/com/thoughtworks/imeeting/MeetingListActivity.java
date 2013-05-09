@@ -1,5 +1,6 @@
 package com.thoughtworks.imeeting;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,10 +17,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.api.services.calendar.model.Event;
 import com.thoughtworks.imeeting.models.MeetingEvent;
+import com.thoughtworks.imeeting.models.Task;
 import com.thoughtworks.imeeting.tasks.CreateEventTask;
 import com.thoughtworks.imeeting.tasks.FetchEventListTask;
 
@@ -28,6 +32,9 @@ public class MeetingListActivity extends BaseActivity{
 	private String roomName;
 	private Long[] duration = new Long[2];
 	private AlertDialog quickBookDialog;
+	private List <Long> freeSlots;
+	private static final int MIN_15 = 900000;
+	private static final int MIN_30 = 1800000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class MeetingListActivity extends BaseActivity{
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meeting_list);
-
+		freeSlots = new ArrayList<Long>();
     }
 	
 	@Override
@@ -133,8 +140,51 @@ public class MeetingListActivity extends BaseActivity{
 		}
 		
 	}
+	
+	private void showDialog(Long startTime, Long endTime){
+		List<String> availableSlots = populateSlots(startTime, endTime);
+	    AlertDialog.Builder b = new AlertDialog.Builder(this);
+	    b.setTitle("Book "+roomName);
+	    View book_room = getLayoutInflater().inflate(R.layout.room_book, null);
+	    NumberPicker slotSelector = (NumberPicker) book_room.findViewById(R.id.slotPicker);
+	    slotSelector.setMinValue(0);
+	    slotSelector.setMaxValue(availableSlots.size()-1);
+	    slotSelector.setDisplayedValues(availableSlots.toArray(new String[]{}));
+	    
+	    b.setView(book_room);
+	    b.setPositiveButton("BOOK", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int whichButton)
+	        {
+	        	Toast.makeText(MeetingListActivity.this, "Book Room", Keys.TOAST_SHORT).show();
+	        	dialog.dismiss();
+	        }
+	    });
+	    b.setNegativeButton("CANCEL", null);
+	    b.create().show();
+	}
+	
+	private List<String> populateSlots(long startTime, long endTime) {
+		freeSlots.clear();
+		long start = startTime/MIN_15*MIN_15;
+		String day;
+		int today = new Date().getDay();
+		long interval = (endTime - startTime)/MIN_30;
+		List<String> list = new ArrayList<String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+		while(interval > 0) {
+			freeSlots.add(start);
+			Date date = new Date(start);
+			 day = date.getDay() > today ? "Tomorrow" : "Today"; 
+			list.add(day +", "+sdf.format(date));
+			start += MIN_30;
+			interval --;
+		}
+		return list;
+	}
 
-	private void populateEventListView(List<Event> events) {
+	private void populateEventListView(final List<Event> events) {
 		final ListView listview = (ListView) findViewById(R.id.listView1);
 		final MeetingListAdapter meetingListAdapter = new MeetingListAdapter(events, this);
 		listview.setAdapter(meetingListAdapter);
@@ -142,27 +192,22 @@ public class MeetingListActivity extends BaseActivity{
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// custom dialog
-				MeetingEvent event = meetingListAdapter.getList().get(arg2);
-				if(event.isEmptySlot()) {
-					MeetingBookDialog dialog = new MeetingBookDialog(MeetingListActivity.this,
-							event.getStartTime().getValue(),
-							event.getEndTime().getValue(), prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, null));
-					dialog.show();
-				} else {
-					
-				}
-				
+				MeetingEvent event = meetingListAdapter.getList().get(arg2); 
+				showDialog(event.getStartTime().getValue(), event.getEndTime().getValue());
 			}
 		});
 	}
 	
 	private void createEvent(Date startTime, Long duration) {
 		String name = prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name));
+		createEvent(name, startTime, duration);
+	}
+	
+	private void createEvent(String title, Date startTime, Long duration) {
 		getProgressDialog().setMessage("Booking "+roomName+"...");
 		getProgressDialog().show();
 		Date endTime = new Date(new Date().getTime() + duration);
-		new CreateEventTask(service, MeetingListActivity.this, calendarId).execute(name, roomName, startTime, endTime);
+		new CreateEventTask(service, MeetingListActivity.this, calendarId).execute(title, roomName, startTime, endTime);
 	}
 	
 }

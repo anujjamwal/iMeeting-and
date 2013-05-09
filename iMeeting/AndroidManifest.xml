@@ -37,7 +37,6 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            
             android:name="com.thoughtworks.imeeting.CaptureActivity"
             android:label="@string/app_name" >
         </activity>
@@ -48,11 +47,7 @@
         <activity
             android:name="com.thoughtworks.imeeting.RoomSelectorActivity"
             android:label="@string/app_name" >
-        </activity>
-        <activity android:name="com.dm.zbar.android.scanner.ZBarScannerActivity"
-                  android:screenOrientation="portrait"
-                  android:hardwareAccelerated="true"
-                  android:label="@string/app_name" />
+        </activity> 
         <activity android:name="com.thoughtworks.imeeting.SettingsActivity"/>
     </application>
 

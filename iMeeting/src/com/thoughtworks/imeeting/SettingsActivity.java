@@ -47,7 +47,7 @@ public class SettingsActivity extends Activity {
 		prefs = this.getSharedPreferences(Keys.PREFERENCE_NAME, Context.MODE_PRIVATE);
 		
 		accountName.setText(prefs.getString(Keys.ACCOUNT_NAME_KEY, null), TextView.BufferType.NORMAL);
-		eventName.setText(prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, null), TextView.BufferType.NORMAL);
+		eventName.setText(prefs.getString(Keys.DEFAULT_EVENT_NAME_KEY, getResources().getString(R.string.default_event_name)), TextView.BufferType.NORMAL);
 		
 		findViewById(R.id.save_settings).setOnClickListener(new OnClickListener() {			
 			@Override
