@@ -38,7 +38,7 @@ public class CreateEventTask extends AsyncTask<Object, Integer, Event> {
 		Event createdEvent = null;
 		try {
 			Event event = new Event();
-
+			
 			
 			ArrayList<EventAttendee> attendees = new ArrayList<EventAttendee>();
 			attendees.add(new EventAttendee().setEmail(calendarId).setResource(true));

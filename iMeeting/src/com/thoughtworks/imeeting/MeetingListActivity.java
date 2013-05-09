@@ -173,8 +173,7 @@ public class MeetingListActivity extends BaseActivity{
 	        	String title = meetingTitle.getText().toString();
 	        	Long duration = durationSelect.getCheckedRadioButtonId() == R.id.radio0 ? MIN_30 : MIN_60;
 	        	dialog.dismiss();
-	        	Toast.makeText(MeetingListActivity.this, "In Progress", Toast.LENGTH_SHORT).show();
-//	        	createEvent(title, new Date(startTime), duration);
+	        	createEvent(title, new Date(startTime), duration);
 	        }
 	    });
 	    b.setNegativeButton("CANCEL", null);
@@ -225,7 +224,7 @@ public class MeetingListActivity extends BaseActivity{
 	private void createEvent(String title, Date startTime, Long duration) {
 		getProgressDialog().setMessage("Booking "+roomName+"...");
 		getProgressDialog().show();
-		Date endTime = new Date(new Date().getTime() + duration);
+		Date endTime = new Date(startTime.getTime() + duration);
 		new CreateEventTask(service, MeetingListActivity.this, calendarId).execute(title, roomName, startTime, endTime);
 	}
 	
