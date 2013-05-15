@@ -14,6 +14,9 @@
         <item >Pragati Maidan</item>
         <item >Parliament</item>
         <item >Qutub Minar</item>
+        <item >Feroz Shah Kotla</item>
+        <item >Jantar Mantar</item>
+        <item >Lal Quila</item>
     </string-array>
     
     <string-array name="gurgaon_rooms_id">
@@ -23,5 +26,8 @@
         <item >i-meeting\\Pragati Maidan=thoughtworks.com_2d31383832323635332d333830@resource.calendar.google.com</item>
         <item >i-meeting\\Parliament=thoughtworks.com_383736383938353235@resource.calendar.google.com</item>
         <item >i-meeting\\Qutub Minar=thoughtworks.com_39343834363831383531@resource.calendar.google.com</item>
+        <item >i-meeting\\Feroz Shah Kotla=thoughtworks.com_32323938303735302d313432@resource.calendar.google.com</item>
+        <item >i-meeting\\Jantar Mantar=thoughtworks.com_3132313934343231343931@resource.calendar.google.com</item>
+        <item >i-meeting\\Lal Quila=thoughtworks.com_2d3431333333353339333834@resource.calendar.google.com</item>
     </string-array>
 </resources>

@@ -41,13 +41,14 @@ public class MeetingListActivity extends BaseActivity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-				
+
 		Intent intent = getIntent();
 		calendarId = intent.getStringExtra(Keys.CALENDAR_ID);
 		roomName = intent.getStringExtra(Keys.ROOM_NAME);
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meeting_list);
+		getActionBar().setSubtitle(roomName);
 		freeSlots = new ArrayList<Long>();
     }
 	
@@ -189,11 +190,12 @@ public class MeetingListActivity extends BaseActivity{
 		long interval = (endTime - startTime)/MIN_30;
 		List<String> list = new ArrayList<String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+
 		while(interval > 0) {
 			freeSlots.add(start);
 			Date date = new Date(start);
-			 day = date.getDay() > today ? "Tomorrow" : "Today"; 
-			list.add(day +", "+sdf.format(date));
+			list.add(sdf2.format(date) +", "+sdf.format(date));
 			start += MIN_30;
 			interval --;
 		}
