@@ -25,28 +25,16 @@ public class MeetingListAdapter extends BaseAdapter{
 		this.context = context;
 		list = new ArrayList<MeetingEvent>();
 		int size = eventList.size();
-		DateTime now = new DateTime(new Date()), eventTime;
-		DateTime end = new DateTime((now.getValue() + 172800000l)/86400000l * 86400000l);
+		DateTime now = new DateTime(new Date()), eventTime; 
 		for(int i=0;i<size;i++) {
-				Event event = eventList.get(i);
-				eventTime = event.getStart().getDateTime();
-				findAndPopulateFreeSlots(now, eventTime);
-				list.add(new MeetingEvent(event));
-				now=event.getEnd().getDateTime();
-			}
-		
-		findAndPopulateFreeSlots(now, end);
-	}
-
-	private void findAndPopulateFreeSlots(DateTime now, DateTime eventTime) {
-		if(now.getValue() + 1800000 < eventTime.getValue()) {
-			if(new Date(now.getValue()).getDay() < new Date(eventTime.getValue()).getDay()){
-				DateTime midnight = new DateTime(now.getValue() / 86400000l * 86400000l);
-				list.add(new MeetingEvent(now, midnight));
-				list.add(new MeetingEvent(midnight, eventTime));
-			} else {
+			Event event = eventList.get(i);
+			eventTime = event.getStart().getDateTime();
+			if(now.getValue() < eventTime.getValue()) {
 				list.add(new MeetingEvent(now, eventTime));
-			}			
+			}
+			list.add(new MeetingEvent(event));
+			now=event.getEnd().getDateTime();
+			event.getCreator().getDisplayName();
 		}
 	}
 
